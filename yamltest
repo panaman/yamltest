@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# This script requires js-yaml to function properly.
+# Tested on CentOS 7
+# Package nodejs-js-yaml is in the EPEL repo
+
+while [[ $# > 0 ]]
+do
+key="$1"
+
+case $key in
+    -f|--file)
+    yamlfile="$2"
+    fart='silent'
+    shift # past argument
+    ;;
+    -h|--help)
+    fart='shart'
+    shift # past argument
+    ;;
+    *)
+    fart='shart'
+    ;;
+esac
+shift # past argument or value
+done
+
+if ([ "$fart" == 'shart' ] || [ -z $yamlfile ]) ;then
+  echo "Panaman's Yaml File Tester";
+  echo "This tool check for syntax errors in yaml files";
+  echo '(-h|--help) Shows this menu';
+  echo '(-f|--file) Enter the full path of the file, example: /etc/test.yaml';
+else
+  if [ ! -f "$yamlfile" ];then
+    echo "No yaml file located here, check your path dummy";
+    exit 0
+  else
+    js-yaml $yamlfile | test;
+  fi
+fi
